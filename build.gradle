@@ -1,0 +1,42 @@
+plugins {
+  id 'groovy'
+  id 'java-library'
+}
+
+group = 'se.alipsa.matrix'
+version = '0.1-SNAPSHOT'
+
+repositories {
+  mavenCentral()
+}
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(17)
+  }
+}
+
+tasks.withType(JavaCompile) {
+  options.deprecation = true
+}
+
+tasks.withType(GroovyCompile) { task ->
+  task.options.deprecation = true
+}
+
+dependencies {
+  implementation("org.apache.groovy:groovy:4.0.25")
+  api('com.google.cloud:google-cloud-bigquery:2.47.0')
+
+  implementation(platform('com.google.auth:google-auth-library-bom:1.30.1'))
+  implementation('com.google.auth:google-auth-library-oauth2-http')
+  def junitVersion = '5.11.4'
+  testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+  testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+  testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+}
+
+test {
+  testLogging.showStandardStreams = true
+  useJUnitPlatform()
+}
